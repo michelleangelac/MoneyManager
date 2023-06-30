@@ -1,6 +1,9 @@
 import logo from '../assets/logo.png'
 import CSS from 'csstype';
-import { Link } from 'react-router-dom'
+import {useState} from 'react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../auth/firebase';
+import { NavLink, useNavigate } from 'react-router-dom'
 
 const imgStyles: CSS.Properties = {
     display: 'block',
@@ -53,17 +56,48 @@ const btnStyles: CSS.Properties = {
     border: '1px solid #DFD2D2'
 }
 
-function Login() {
+const Login = () => {
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+       
+    const onLogin = (e) => {
+        e.preventDefault();
+        signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in
+            const user = userCredential.user;
+            navigate("/home")
+            console.log(user);
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorCode, errorMessage)
+            alert(errorMessage)
+        });
+    }
+
     return (
         <div>
             <img src={logo} style={imgStyles}></img>
             <h1 style={h1Styles}>LOGIN</h1>
             <form style={formStyles}>
-                <input style={inputStyles} type='email' placeholder='Email Address*'></input><br></br>
-                <input style={inputStyles} type='password' placeholder='Password*'></input><br></br>
-                <Link to="/resetpassword" style={linkStyles}><i>Forgot Password?</i></Link><br></br>
-                <button style={btnStyles} type='button'>Confirm</button><br></br>
-                <div style={divStyles}>Don't have an account? <Link style={divStyles} to="/signup"><i>Create Account</i></Link></div>
+                <input 
+                    style={inputStyles} 
+                    type='email' required 
+                    placeholder='Email Address*' 
+                    onChange={(e) => setEmail(e.target.value)}>
+                </input><br></br>
+                <input 
+                    style={inputStyles} 
+                    type='password' required 
+                    placeholder='Password*'
+                    onChange={(e) => setPassword(e.target.value)}>
+                </input><br></br>
+                <NavLink to="/resetpassword" style={linkStyles}><i>Forgot Password?</i></NavLink><br></br>
+                <button style={btnStyles} type='button' onClick={onLogin}>Login</button><br></br>
+                <div style={divStyles}>Don't have an account? <NavLink style={divStyles} to="/signup"><i>Create Account</i></NavLink></div>
             </form>
         </div>
     );
