@@ -69,12 +69,17 @@ const Login = () => {
             const user = userCredential.user;
             navigate("/home")
             console.log(user);
+            alert("Login successful")
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorCode, errorMessage)
-            alert(errorMessage)
+            if(errorMessage == "Firebase: Error (auth/user-not-found)." || errorMessage == "Firebase: Error (auth/wrong-password).") {
+                alert("Login failed: Incorrect email or password.")
+            } else {
+                alert(errorMessage)
+            }
         });
     }
 
