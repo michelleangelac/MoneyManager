@@ -2,7 +2,8 @@ import logo from '../assets/logo.png'
 import './Header.css'
 import { signOut } from "firebase/auth";
 import { auth } from '../auth/firebase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Navbar, Nav } from 'react-bootstrap';
 
 const styles = {
     holder: {
@@ -18,7 +19,7 @@ const styles = {
         display: 'flex',
         fontSize: '24px',
         marginLeft: '25vh',
-        marginRight: '10vh'
+        marginRight: '10vh',
     },
     links: {
         display: 'flex',
@@ -40,6 +41,7 @@ const styles = {
 
 const Header = () => {
     const navigate = useNavigate();
+    const location = useLocation();
  
     const handleLogout = () => {               
         signOut(auth).then(() => {
@@ -52,23 +54,15 @@ const Header = () => {
     }
 
     return (
-        <nav style={styles.holder} className="navbar navbar-expand-lg navbar-light bg-light">
+        <Navbar style={styles.holder} bg='light' data-bs-theme="light">
             <img src={logo} style={styles.img}></img>
-            <div className="collapse navbar-collapse" id="navbarNav">
-                <ul className="navbar-nav">
-                    <li className="nav-item">
-                        <a style={styles.leftLink} id='home' className="nav-link" href="/home">Home</a>
-                    </li>
-                    <li className="nav-item">
-                        <a style={styles.links} className="nav-link" href="/goals">Goals</a>
-                    </li>
-                    <li className="nav-item">
-                        <a style={styles.links} className="nav-link" href="/profile">Profile</a>
-                    </li>
-                </ul>
+            <Nav activeKey={location.pathname} className="me-auto">
+                <Nav.Link style={styles.leftLink} href="/home">Home</Nav.Link>
+                <Nav.Link style={styles.links} href="/goals">Goals</Nav.Link>
+                <Nav.Link style={styles.links} href="/profile">Profile</Nav.Link>
+                </Nav>
                 <button type='button' style={styles.btn} className='btn' data-toggle="button" onClick={handleLogout}>Signout</button>
-            </div>
-        </nav>
+        </Navbar>
     )
 }
 
