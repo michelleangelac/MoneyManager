@@ -1,0 +1,38 @@
+.logo {
+    display: 'block';
+    margin: '1vh 2vh 1vh 3vh';
+    height: '11vh'
+}
+
+#leftLink {
+    display: 'flex';
+    font-size: '24px';
+    margin-left: '25vh';
+    margin-right: '10vh'
+}
+
+#links {
+    display: 'flex';
+    font-size: '24px';
+    margin-left: '10vh';
+    margin-right: '10vh'
+}
+
+button {
+    display: 'flex';
+    font-size: '24px';
+    border: '2px solid #DFD2D2';
+    border-radius: '30px';
+    padding: '5px 15px';
+    background-color: '#EFEBEB';
+    margin-left: '25vh';
+    margin-right: '10vh'
+}
+
+.nav-link:hover {
+    color: black;
+}
+
+.nav-link:active {
+    color: '#DFD2D2';
+}

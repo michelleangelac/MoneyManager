@@ -14,12 +14,15 @@ const imgStyles: CSS.Properties = {
     height: '17vh'
 }
 
-
 const h1Styles: CSS.Properties = {
     textAlign: 'center',
     marginBottom: '5vh',
     fontWeight: 'bold',
     fontFamily: 'Inter'
+}
+
+const formStyles: CSS.Properties = {
+    textAlign: 'center'
 }
 
 const inputStyles: CSS.Properties = {
