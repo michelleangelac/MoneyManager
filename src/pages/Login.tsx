@@ -1,6 +1,6 @@
 import logo from '../assets/logo.png'
 import CSS from 'csstype';
-import {useState} from 'react';
+import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../auth/firebase';
 import { NavLink, useNavigate } from 'react-router-dom'

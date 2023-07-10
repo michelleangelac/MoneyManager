@@ -35,6 +35,20 @@ const inputStyles: CSS.Properties = {
     fontFamily: 'Inter'
 }
 
+const divStyles: CSS.Properties = {
+    color: 'black',
+    fontFamily: 'Inter'
+}
+
+const btnStyles: CSS.Properties = {
+    width: '50vh',
+    height: '6vh',
+    borderRadius: '7px',
+    margin: '3vh 0 3vh 0',
+    fontFamily: 'Inter',
+    backgroundColor: '#EFEBEB',
+    border: '1px solid #DFD2D2'
+}
 
 const signUp = () => {
     const navigate = useNavigate();
@@ -89,6 +103,8 @@ const signUp = () => {
                     placeholder='Confirm Password*'
                     onChange={(e) => setCfmPassword(e.target.value)}>
                 </input><br></br>
+                <button style={btnStyles} type='button' onClick={onsignUp}>Create</button><br></br>
+                <div style={divStyles}>Already have an account? <NavLink style={divStyles} to="/"><i>Login</i></NavLink></div>
             </form>
         </div>
     );
