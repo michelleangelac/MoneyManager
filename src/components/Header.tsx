@@ -1,9 +1,8 @@
 import logo from '../assets/logo.png'
-import './Header.css'
 import { signOut } from "firebase/auth";
 import { auth } from '../auth/firebase';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav, Button } from 'react-bootstrap';
 
 const styles = {
     holder: {
@@ -28,11 +27,11 @@ const styles = {
         marginRight: '10vh'
     },
     btn: {
-        display: 'flex',
         border: '2px solid #DFD2D2',
         borderRadius: '30px',
         padding: '5px 15px',
         backgroundColor: '#EFEBEB',
+        color: 'black',
         fontSize: '24px',
         marginLeft: '25vh',
         marginRight: '10vh'
@@ -61,7 +60,7 @@ const Header = () => {
                 <Nav.Link style={styles.links} href="/goals">Goals</Nav.Link>
                 <Nav.Link style={styles.links} href="/profile">Profile</Nav.Link>
                 </Nav>
-                <button type='button' style={styles.btn} className='btn' data-toggle="button" onClick={handleLogout}>Signout</button>
+                <Button type='button' style={styles.btn} className='btn' data-toggle="button" onClick={handleLogout}>Signout</Button>
         </Navbar>
     )
 }
