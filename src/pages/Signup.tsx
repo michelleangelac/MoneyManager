@@ -1,8 +1,9 @@
 import logo from '../assets/logo.png'
 import CSS from 'csstype';
-import {useState} from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../auth/firebase';
+import { useState } from 'react';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { setDoc, doc } from 'firebase/firestore';
+import { auth, db } from '../auth/firebase';
 import { NavLink, useNavigate } from 'react-router-dom'
 
 const imgStyles: CSS.Properties = {
@@ -57,14 +58,19 @@ const signUp = () => {
     const [password, setPassword] = useState('');
     const [cfmpassword, setCfmPassword] = useState('');
 
-    const onsignUp = (e) => {
+    const onsignUp = async(e) => {
+        if(cfmpassword != password) {
+            alert("Signup failed: Password and confirm password doesn't match")
+            return;
+        }
         e.preventDefault();
-        signInWithEmailAndPassword(auth, email, password)
+        await createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
             // Signed in
             const user = userCredential.user;
-            navigate("/home")
             console.log(user);
+            alert("Signup successful")
+            navigate("/home")
         })
         .catch((error) => {
             const errorCode = error.code;
@@ -72,12 +78,17 @@ const signUp = () => {
             console.log(errorCode, errorMessage)
             alert(errorMessage)
         });
+
+        await setDoc(doc(db, "Users", email), {
+            Username: username,
+            ProfilePic: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+        })
     }
 
     return (
         <div>
             <img src={logo} style={imgStyles}></img>
-            <h1 style={h1Styles}>Create Account</h1>
+            <h1 style={h1Styles}>CREATE ACCOUNT</h1>
             <form style={formStyles}>
                 <input 
                     style={inputStyles} 
@@ -99,7 +110,7 @@ const signUp = () => {
                 </input><br></br>
                 <input 
                     style={inputStyles} 
-                    type='Confirm Password' required 
+                    type='Password' required 
                     placeholder='Confirm Password*'
                     onChange={(e) => setCfmPassword(e.target.value)}>
                 </input><br></br>
