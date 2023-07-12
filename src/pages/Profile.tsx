@@ -3,11 +3,13 @@ import { Image, Modal } from 'react-bootstrap'
 import CSS from 'csstype';
 import { onAuthStateChanged, updateEmail } from "firebase/auth";
 import { doc, getDoc, updateDoc, setDoc, deleteDoc } from "firebase/firestore";
-import { db, auth } from '../auth/firebase';
+import { db, auth, storage } from '../auth/firebase';
 import { useState, useEffect, useRef } from 'react';
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 const imgStyles: CSS.Properties = {
     width: '30vh',
+    height: '30vh',
     margin: '7vh 0 0 100vh',
 }
 
@@ -21,10 +23,20 @@ const inputStyles: CSS.Properties = {
 }
 
 const btnStyles: CSS.Properties = {
-    width: '50vh',
+    width: '40vh',
     height: '6vh',
     borderRadius: '7px',
-    marginTop: '5vh',
+    marginTop: '6vh',
+    fontFamily: 'Inter',
+    backgroundColor: '#EFEBEB',
+    border: '1px solid #DFD2D2'
+}
+
+const btn2Styles: CSS.Properties = {
+    width: '40vh',
+    height: '6vh',
+    borderRadius: '7px',
+    margin: '6vh 0 0 5vh',
     fontFamily: 'Inter',
     backgroundColor: '#EFEBEB',
     border: '1px solid #DFD2D2'
@@ -47,6 +59,13 @@ const Profile = () => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+
+    const [show2, setShow2] = useState(false);
+    const handleClose2 = () => {
+        setShow2(false);
+        setPercent(0);
+    }
+    const handleShow2 = () => setShow2(true);
 
     const usernameInputRef = useRef(null);
     const emailInputRef = useRef(null);
@@ -99,6 +118,47 @@ const Profile = () => {
         location.reload();
     }
 
+    const [image, setImage] = useState("");
+    const [percent, setPercent] = useState(0);
+
+    const handleChange = (e) => {
+        setImage(e.target.files[0])
+    }
+
+    const handleUpload = async(event) => {
+        event.preventDefault()
+        console.log(image)
+        if(!image) {
+            alert("Please upload an image first.");
+            return;
+        }
+        const user = auth.currentUser;
+        const storageRef = ref(storage, user?.email);
+        console.log(storageRef)
+        const uploadImage = uploadBytesResumable(storageRef, image);
+        uploadImage.on(
+            'state_changed',
+            (snapshot) => {
+                const percent = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                setPercent(percent);
+                console.log(percent)
+            },
+            (err) => { 
+                console.log(err)
+                alert(err) 
+            },
+            () => {
+                getDownloadURL(uploadImage.snapshot.ref)
+                .then((url) => {
+                    console.log(url)
+                    updateDoc(doc(db, "Users", user?.email), { ProfilePic: url });
+                    setProfilePic(url);
+                });
+                console.log("FINISH UPLOADING!");
+            }
+        )
+    }
+
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if(user) {
@@ -118,14 +178,15 @@ const Profile = () => {
     return (
         <div style={{fontFamily:'Inter'}}>
             <Header/>
-            <Image style={imgStyles} roundedCircle src={profilePic}></Image>
+            <Image style={imgStyles} roundedCircle thumbnail src={profilePic}></Image>
             <br></br>
             <form id="form" style={{ textAlign:'center', fontFamily:'Inter', marginTop: '7vh' }}>
                 <label style={{ margin:'0 10vh 5vh 0', fontSize:'1.25em' }}>Username </label>
                 <input style={inputStyles} type='text' value={username} readOnly></input><br></br>
                 <label style={{ marginRight:'17vh', fontSize:'1.25em'}}>Email </label>
                 <input style={inputStyles} type='email' value={email} readOnly></input><br></br>
-                <button style={btnStyles} type='button' onClick={handleShow}>Edit profile</button><br></br>
+                <button style={btnStyles} type='button' onClick={handleShow}>Edit profile</button>
+                <button style={btn2Styles} type='button' onClick={handleShow2}>Change profile picture</button><br></br>
             </form>
             <Modal show={show} onHide={handleClose} centered>
                 <Modal.Header closeButton>
@@ -150,6 +211,28 @@ const Profile = () => {
                             onClick={handleSave}>
                             Save Changes
                         </button>
+                    </form>
+                </Modal.Body>
+            </Modal>
+            <Modal show={show2} onHide={handleClose2} centered>
+                <Modal.Header closeButton>
+                <Modal.Title>Change Profile Picture</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <form style={{ padding:'2vh 3vh', textAlign:'center' }}>
+                        <div style={{ textAlign:'center', fontSize:'1.2em', marginBottom:'2vh' }}>Upload your image here</div>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            style={{ marginLeft:'10vh' }}
+                            onChange={handleChange}
+                        /><br></br>
+                        <button 
+                            style={{ margin:'3vh 0 2vh 0', backgroundColor:'#EFEBEB', border:'1px solid #DFD2D2', width:'45vh', borderRadius:'5px', padding:'7px 10px' }} 
+                            onClick={handleUpload}>
+                            Upload
+                        </button>
+                        <p>{percent}% done</p>
                     </form>
                 </Modal.Body>
             </Modal>
