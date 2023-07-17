@@ -141,7 +141,6 @@ const Profile = () => {
             (snapshot) => {
                 const percent = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
                 setPercent(percent);
-                console.log(percent)
             },
             (err) => { 
                 console.log(err)
