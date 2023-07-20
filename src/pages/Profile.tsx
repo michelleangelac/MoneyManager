@@ -55,6 +55,7 @@ const Profile = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [profilePic, setProfilePic] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+    const [transactions, setTransactions] = useState([])
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -94,7 +95,7 @@ const Profile = () => {
                 console.log("Email updated")
             })
             .catch((error) => {
-                console.log(error)
+                console.log(error.message)
                 err = true 
                 alert("An error has occurred, please try again!")
                 return
@@ -103,7 +104,8 @@ const Profile = () => {
             if(!err) {
                 await setDoc(doc(db, 'Users', newEmail), {
                     Username: username,
-                    ProfilePic: profilePic
+                    ProfilePic: profilePic,
+                    Transactions: transactions
                 });
                 await deleteDoc(docRef);
                 setEmail(newEmail);
@@ -169,6 +171,12 @@ const Profile = () => {
 
                 getData(user)
                 .then(data => setProfilePic(data?.ProfilePic))
+                .catch(err => console.log(err))
+
+                getData(user)
+                .then(data => {
+                    setTransactions(data?.Transactions)
+                })
                 .catch(err => console.log(err))
             }
         })
