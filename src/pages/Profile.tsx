@@ -92,7 +92,7 @@ const Profile = () => {
             let err = false;
             await updateEmail(auth.currentUser, newEmail)
             .then(() => {
-                console.log("Email updated")
+                console.log("Email has been updated")
             })
             .catch((error) => {
                 console.log(error.message)
@@ -112,9 +112,14 @@ const Profile = () => {
             }
         }
         if(newUsername != "") {
-            docRef = doc(db, 'Users', (newEmail ? newEmail : userEmail))
-            setUsername(newUsername)
-            updateDoc(docRef, { Username: newUsername })
+            try {
+                docRef = doc(db, 'Users', (newEmail ? newEmail : userEmail))
+                setUsername(newUsername)
+                updateDoc(docRef, { Username: newUsername })
+                alert("Username has been updated.")
+            } catch(error) {
+                alert("An error has occurred, please try again!")
+            }
         }
         handleClose();
         location.reload();
@@ -152,8 +157,13 @@ const Profile = () => {
                 getDownloadURL(uploadImage.snapshot.ref)
                 .then((url) => {
                     console.log(url)
-                    updateDoc(doc(db, "Users", user?.email), { ProfilePic: url });
-                    setProfilePic(url);
+                    try {
+                        updateDoc(doc(db, "Users", user?.email), { ProfilePic: url });
+                        setProfilePic(url);
+                        alert("The profile picture has been updated.")
+                    } catch(error) {
+                        alert("An error has occurred, please try again!")
+                    }
                 });
                 console.log("FINISH UPLOADING!");
             }

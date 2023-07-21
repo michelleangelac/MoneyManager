@@ -45,6 +45,7 @@ const Home = () => {
         setCategory("");
     }
     const handleShow = () => setShow(true);
+    
     const handleSave = async(e) => {
         if(type == "") {
             alert("Please select the transaction type first!")
@@ -70,8 +71,12 @@ const Home = () => {
             Category: category,
             Type: type
         })
-        await updateDoc(docRef, { Transactions: transactionList })
-        alert("Transaction succesfully created.")
+        try {
+            await updateDoc(docRef, { Transactions: transactionList })
+            alert("The transaction was succesfully created.")
+        } catch(error) {
+            alert("Failed to create transaction: " + error);
+        }
         handleClose()
     }
 
@@ -119,14 +124,15 @@ const Home = () => {
                             }
                         } else {
                             if(helper && i < temp.length - 2) {
-                                arr.push(temp.at(i-1))
+                                arr.push(temp.at(i))
                                 temp2.push(arr);
                                 //console.log(arr);
                                 arr = new Array()
-                            } 
-                            arr.push(temp.at(i))
-                            temp2.push(arr);
-                            arr = new Array()
+                            } else {
+                                arr.push(temp.at(i))
+                                temp2.push(arr);
+                                arr = new Array()
+                            }
                             if(i == temp.length - 2) {
                                 arr.push(temp.at(i+1))
                                 temp2.push(arr);
@@ -182,7 +188,7 @@ const Home = () => {
             </Container>
             <hr style={hr}></hr>
             {transactions.length > 0 ? transactions.map(x => <DailyTransactions data={x}></DailyTransactions>) : <></>}
-            <Button onClick={handleShow} variant='secondary' size='lg' style={{ position:'absolute', right:'2vw', bottom:'4vh' }}>
+            <Button onClick={handleShow} variant='secondary' size='lg' style={{ position:'fixed', right:'2vw', bottom:'4vh' }}>
                 <FaPlus
                     style={{ color:'white', fontSize:'1.25em' }}
                 />
