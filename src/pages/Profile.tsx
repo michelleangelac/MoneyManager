@@ -6,6 +6,7 @@ import { doc, getDoc, updateDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { db, auth, storage } from '../auth/firebase';
 import { useState, useEffect, useRef } from 'react';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import Resizer from "react-image-file-resizer";
 
 const imgStyles: CSS.Properties = {
     width: '30vh',
@@ -127,8 +128,24 @@ const Profile = () => {
 
     const [image, setImage] = useState("");
     const [percent, setPercent] = useState(0);
+    
+    const resizeImage = (image) => 
+        new Promise((resolve) => {
+            Resizer.imageFileResizer(
+                image,
+                300,
+                300, 
+                "JPEG",
+                100,
+                0,
+                (uri) => {
+                    resolve(uri)
+                },
+                "base64"
+            )
+        })
 
-    const handleChange = (e) => {
+    const handleChange = async(e) => {
         setImage(e.target.files[0])
     }
 
@@ -139,35 +156,40 @@ const Profile = () => {
             alert("Please upload an image first.");
             return;
         }
+        const imageResized = await resizeImage(image);
         const user = auth.currentUser;
         const storageRef = ref(storage, user?.email);
         console.log(storageRef)
-        const uploadImage = uploadBytesResumable(storageRef, image);
-        uploadImage.on(
-            'state_changed',
-            (snapshot) => {
-                const percent = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-                setPercent(percent);
-            },
-            (err) => { 
-                console.log(err)
-                alert(err) 
-            },
-            () => {
-                getDownloadURL(uploadImage.snapshot.ref)
-                .then((url) => {
-                    console.log(url)
-                    try {
-                        updateDoc(doc(db, "Users", user?.email), { ProfilePic: url });
-                        setProfilePic(url);
-                        alert("The profile picture has been updated.")
-                    } catch(error) {
-                        alert("An error has occurred, please try again!")
-                    }
-                });
-                console.log("FINISH UPLOADING!");
-            }
-        )
+        fetch(imageResized)
+        .then((res) => res.blob())
+        .then((blob) => {
+            const uploadImage = uploadBytesResumable(storageRef, blob);
+            uploadImage.on(
+                'state_changed',
+                (snapshot) => {
+                    const percent = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+                    setPercent(percent);
+                },
+                (err) => { 
+                    console.log(err)
+                    alert(err) 
+                },
+                () => {
+                    getDownloadURL(uploadImage.snapshot.ref)
+                    .then((url) => {
+                        console.log(url)
+                        try {
+                            updateDoc(doc(db, "Users", user?.email), { ProfilePic: url });
+                            setProfilePic(url);
+                            alert("The profile picture has been updated.")
+                        } catch(error) {
+                            alert("An error has occurred, please try again!")
+                        }
+                    });
+                    console.log("FINISH UPLOADING!");
+                }
+            )
+        })
     }
 
     useEffect(() => {
