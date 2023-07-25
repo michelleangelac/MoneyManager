@@ -23,8 +23,9 @@ async function getData(user) {
 }
 
 const Home = () => {
-    const [startDate, setStartDate] = useState(new Date());
-    let currentMonth = String(startDate).substring(4,7);
+    const [month, setMonth] = useState(new Date());
+    let currentMonth = String(month).substring(4,7);
+    let currentYear = String(month).substring(11,15);
 
     const [income, setIncome] = useState(0);
     const [expense, setExpense] = useState(0);
@@ -80,6 +81,30 @@ const Home = () => {
         handleClose()
     }
 
+    const handlePrevMonth = () => {
+        const prevDate = month.getDate();
+        let prevMonth = month.getMonth() - 1;
+        let prevYear = month.getFullYear();
+   
+        if(prevMonth == -1) {
+            prevYear--;
+            prevMonth = 11;
+        }
+        setMonth(new Date(prevYear, prevMonth, prevDate))
+    }
+
+    const handleNextMonth = () => {
+        const date = month.getDate();
+        let nextMonth = month.getMonth() + 1;
+        let nextYear = month.getFullYear();
+   
+        if(nextMonth == 12) {
+            nextYear++;
+            nextMonth = 0;
+        }
+        setMonth(new Date(nextYear, nextMonth, date))
+    }
+
     const [transactions, setTransactions] = useState(new Array());
     const user = auth.currentUser;
 
@@ -95,7 +120,8 @@ const Home = () => {
                         const tDate = tr.Date
                         const tAmount = tr.Amount  
                         let month = String(new Date(tDate.seconds * 1000)).substring(4,7);
-                        if(currentMonth == month) {
+                        let year = String(new Date(tDate.seconds * 1000)).substring(11,15);
+                        if(currentMonth == month && currentYear == year) {
                             temp.push(tr)
                             if(tr.Type == "income") {
                                 tempIncome += tAmount;
@@ -156,20 +182,23 @@ const Home = () => {
     return (
         <div style={{ fontFamily:'Inter', textAlign:'center' }}>
             <Header/>
-            {/* <button style={{ border:'none', backgroundColor:'inherit', marginRight:'10vh' }}>
-                <MdOutlineKeyboardArrowLeft size={45}/>
-            </button> */}
-            <DatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                dateFormat="MMMM yyyy"
-                customInput={<input id='datepickerInput' style={{ border:'none', textAlign:'center', fontSize:'1.3em', marginTop:'5vh', fontFamily:'Inter', cursor:'pointer'  }} />}
-                showMonthYearPicker
-            />
+            <div style={{ display:'flex', flexDirection:'row', margin:'2vh 0 0 30vw' }}>
+                <button onClick={handlePrevMonth} style={{ border:'none', backgroundColor:'inherit', display:'block', marginRight:'5vw' }}>
+                    <MdOutlineKeyboardArrowLeft size={40}/>
+                </button>
+                <DatePicker
+                    selected={month}
+                    onChange={(date) => setMonth(date)}
+                    dateFormat="MMMM yyyy"
+                    customInput={<input id='datepickerInput' 
+                    style={{ display:'block', border:'none', textAlign:'center', marginTop:'1.5vh', fontSize:'1.3em', fontFamily:'Inter', cursor:'pointer'  }} />}
+                    showMonthYearPicker
+                />
+                <button onClick={handleNextMonth} style={{ border:'none', backgroundColor:'inherit', float:'right', display:'block', marginLeft:'5vw' }}>
+                    <MdOutlineKeyboardArrowRight size={40}/>
+                </button>
+            </div>
             <hr style={hr}></hr>
-            {/* <button style={{ border:'none', backgroundColor:'inherit', marginLeft:'20vh' }}>
-                <MdOutlineKeyboardArrowRight size={45}/>
-            </button><br></br> */}
             <Container>
                 <Row>
                     <Col>
