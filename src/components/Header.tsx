@@ -17,14 +17,13 @@ const styles = {
     leftLink: {
         display: 'flex',
         fontSize: '24px',
-        marginLeft: '25vh',
-        marginRight: '10vh',
+        marginLeft: '10vw',
+        marginRight: '5vw',
     },
     links: {
         display: 'flex',
         fontSize: '24px',
-        marginLeft: '10vh',
-        marginRight: '10vh'
+        marginRight: '5vw'
     },
     btn: {
         border: '2px solid #DFD2D2',
@@ -33,8 +32,7 @@ const styles = {
         backgroundColor: '#EFEBEB',
         color: 'black',
         fontSize: '24px',
-        marginLeft: '25vh',
-        marginRight: '10vh'
+        marginLeft: '5vw'
     }
 }
 
@@ -53,14 +51,15 @@ const Header = () => {
     }
 
     return (
-        <Navbar style={styles.holder} bg='light' data-bs-theme="light">
+        <Navbar style={styles.holder} expand="lg" bg='light' data-bs-theme="light">
             <img src={logo} style={styles.img}></img>
             <Nav activeKey={location.pathname} className="me-auto">
                 <Nav.Link style={styles.leftLink} href="/home">Home</Nav.Link>
-                <Nav.Link style={styles.links} href="/goals">Goals</Nav.Link>
+                <Nav.Link style={styles.links} href="/savings">Savings</Nav.Link>
+                <Nav.Link style={styles.links} href="/insights">Insights</Nav.Link>
                 <Nav.Link style={styles.links} href="/profile">Profile</Nav.Link>
-                </Nav>
                 <Button type='button' style={styles.btn} className='btn' data-toggle="button" onClick={handleLogout}>Signout</Button>
+            </Nav>
         </Navbar>
     )
 }
