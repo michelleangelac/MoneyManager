@@ -1,12 +1,11 @@
 import Header from "../components/Header";
 
-function Saving() {
+function Savings() {
     return (
         <div>
             <Header/>
-            <h1>Saving</h1>
         </div>
     )
 }
 
-export default Saving;
+export default Savings;
