@@ -1,15 +1,15 @@
 # Money Manager - CoinOpus 
-This project is meant to provide a spending tracking and analysis tool specifically catered to students. The application aims to help users track their income and expenses, analyze their financial data, and provide recommendations on saving strategies. It allows users to set target expenses and provides visual representations of income and expenses to help users gain insights into their financial habits.
+This project is meant to provide a spending tracking and analysis tool specifically catered to university students. The application aims to help users track their income and expenses, analyze their financial data, and provide meaningful insights to users on financial management. It allows users to set target expenses and provides visual representations of income and expenses to help users gain insights into their financial habits.
 
 # Functions (Higher Priority)
-1. Create, Update, and Delete Transactions
-Users can create income and expense transactions by providing details such as name, date, amount, and category. They can also update or delete existing transactions as needed.
+1. Create and Delete Transactions
+Users can create income and expense transactions by providing details such as name, date, amount, and category. They can also delete existing transactions as needed.
 
 2. Display Total Income and Spending
-The application displays the total income and spending for a given period, allowing users to easily track their financial situation.
+The application displays the total income and spending for a given period, both monthly and daily, allowing users to easily track their financial situation.
 
-3. Set Target for Expenses
-Users can set targets for their expenses, helping them stay within their desired budget.
+3. Set Target for Saving
+Users can set saving goals for their expenses, helping them keep track of their savings goals and their progress.
 
 # Functions 2.0 (Lower Priority)
 1. Account Integration 
