@@ -89,7 +89,8 @@ const signUp = () => {
         await setDoc(doc(db, "Users", email), {
             Username: username,
             ProfilePic: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-            Transactions: []
+            Transactions: [],
+            SavingGoals: []
         })
     }
 

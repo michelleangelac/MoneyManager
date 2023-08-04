@@ -57,6 +57,7 @@ const Profile = () => {
     const [email, setEmail] = useState("");
     const [profilePic, setProfilePic] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
     const [transactions, setTransactions] = useState([])
+    const [savingGoals, setSavingGoals] = useState([])
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -106,7 +107,8 @@ const Profile = () => {
                 await setDoc(doc(db, 'Users', newEmail), {
                     Username: username,
                     ProfilePic: profilePic,
-                    Transactions: transactions
+                    Transactions: transactions,
+                    SavingGoals: savingGoals
                 });
                 await deleteDoc(docRef);
                 setEmail(newEmail);
@@ -210,6 +212,7 @@ const Profile = () => {
                 getData(user)
                 .then(data => {
                     setTransactions(data?.Transactions)
+                    setSavingGoals(data?.SavingGoals)
                 })
                 .catch(err => console.log(err))
             }
