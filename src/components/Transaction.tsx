@@ -59,7 +59,7 @@ const Transaction = (props) => {
                     <div style={{ margin:'2vh 0 3vh 0' }}>Are you sure you want to delete this transaction?</div>
                     <Button onClick={handleDelete} style={{ width:'20vw', marginBottom:'2vh' }} variant='danger'>Delete</Button>
                 </Modal.Body>
-            </Modal>
+            </Modal> 
         </>
     )
 }
