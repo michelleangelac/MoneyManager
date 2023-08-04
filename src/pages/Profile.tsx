@@ -110,6 +110,8 @@ const Profile = () => {
                 });
                 await deleteDoc(docRef);
                 setEmail(newEmail);
+            } else {
+                alert(err);
             }
         }
         if(newUsername != "") {
