@@ -1,4 +1,5 @@
 import logo from '../assets/logo.png'
+import logo2 from '../assets/logo-notext.png'
 import { signOut } from "firebase/auth";
 import { auth } from '../auth/firebase';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -12,7 +13,7 @@ const styles = {
     img: {
         display: 'block',
         margin: '1vh 2vh 1vh 3vh',
-        height: '11vh'
+        width: '20%'
     },
     leftLink: {
         display: 'flex',
@@ -52,7 +53,7 @@ const Header = () => {
 
     return (
         <Navbar style={styles.holder} expand="lg" bg='light' data-bs-theme="light">
-            <img src={logo} style={styles.img}></img>
+            <img src={logo} alt={logo2} style={styles.img}></img>
             <Nav activeKey={location.pathname} className="me-auto">
                 <Nav.Link style={styles.leftLink} href="/home">Home</Nav.Link>
                 <Nav.Link style={styles.links} href="/savings">Savings</Nav.Link>

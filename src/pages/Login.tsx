@@ -4,14 +4,21 @@ import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../auth/firebase';
 import { NavLink, useNavigate } from 'react-router-dom'
+import { Container, Row, Col } from 'react-bootstrap';
+
+const container: CSS.Properties = {
+    width: '100vw',
+    height: '100vh',
+    backgroundImage: 'url(https://imageupload.io/ib/niPDTzzvN2850Jn_1691137210.jpg)'
+}
 
 const imgStyles: CSS.Properties = {
     display: 'block',
     marginLeft: 'auto',
     marginRight: 'auto',
-    marginTop: '5vh',
+    paddingTop: '5vh',
     marginBottom: '5vh',
-    height: '17vh'
+    height: '21vh'
 }
 
 const h1Styles: CSS.Properties = {
@@ -53,7 +60,7 @@ const btnStyles: CSS.Properties = {
     margin: '3vh 0 3vh 0',
     fontFamily: 'Inter',
     backgroundColor: '#EFEBEB',
-    border: '1px solid #DFD2D2'
+    border: '1px solid gray'
 }
 
 const Login = () => {
@@ -84,7 +91,7 @@ const Login = () => {
     }
 
     return (
-        <div>
+        <div style={container}>
             <img src={logo} style={imgStyles}></img>
             <h1 style={h1Styles}>LOGIN</h1>
             <form style={formStyles}>
