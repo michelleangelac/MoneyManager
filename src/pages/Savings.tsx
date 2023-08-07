@@ -105,7 +105,8 @@ function Savings() {
         }
         e.preventDefault()
         const user = auth.currentUser;
-        const docRef = doc(db, "Users", user?.email);
+        let email = user?.email ? user?.email : "";
+        const docRef = doc(db, "Users", email);
         const docSnap = await getDoc(docRef);
         const data = docSnap.data();
         

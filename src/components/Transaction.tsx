@@ -18,7 +18,7 @@ const Transaction = (props) => {
 
     const handleDelete = async() => {
         const user = auth.currentUser;
-        let email = user?.email;
+        let email = user?.email ? user.email : "";
         const docRef = doc(db, "Users", email);
         const docSnap = await getDoc(docRef);
         let data = docSnap.data();    
