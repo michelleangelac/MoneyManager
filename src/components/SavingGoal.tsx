@@ -36,6 +36,13 @@ const SavingGoal = (props) => {
                 break;
             }            
         }
+        try {
+            await updateDoc(docRef, { SavingGoals: savingGoals });
+            alert("The amount of the selected goal is updated.");
+        } catch(error) {
+            alert("Failed to update: " + error);
+        }
+        handleClose()  
     }
 
     const handleDelete = async() => {
@@ -59,7 +66,7 @@ const SavingGoal = (props) => {
 
     return (
         <div>
-            <Card onClick={handleShow} style={{ width: '50vw', cursor:'pointer' }}>
+            <Card onClick={handleShow} style={{ width: '50vw', cursor:'pointer', marginBottom:'3vh' }}>
                 <Card.Body>
                     <Card.Text>
                         <div style={{ padding:'1vh' }}>
@@ -78,7 +85,7 @@ const SavingGoal = (props) => {
                 </Modal.Header>
                 <Modal.Body>
                     <form style={{ padding:'2vh 3vh' }}>
-                        <ToggleButtonGroup defaultValue="update" style={{ marginLeft:'8vw' }} type="radio" name="options">
+                        <ToggleButtonGroup style={{ marginLeft:'8vw' }} type="radio" name="options">
                             <ToggleButton onChange={(e) => setModalType(e.target.value)} variant='outline-dark' id="tbg-radio-1" value="update">
                             Update amount
                             </ToggleButton>
