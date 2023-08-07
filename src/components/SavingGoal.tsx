@@ -5,7 +5,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 const SavingGoal = (props) => {
     let goal = props.data;
-    var percentage = Math.round(goal.CurrentAmount / goal.Amount * 100)
+    const [percentage, setPercentage] = useState(Math.round(goal.CurrentAmount / goal.Amount * 100));
     const [currentAmount, setCurrentAmount] = useState(0);
     const [modalType, setModalType] = useState("");
 
@@ -16,7 +16,7 @@ const SavingGoal = (props) => {
     const handleShow = () => setShow(true);
 
     const user = auth.currentUser;
-    let email = user?.email;
+    let email = user?.email ? user.email : "";
     const docRef = doc(db, "Users", email);
 
     const handleSave = async() => {
@@ -42,6 +42,7 @@ const SavingGoal = (props) => {
         } catch(error) {
             alert("Failed to update: " + error);
         }
+        setPercentage(Math.round(currentAmount / goal.Amount * 100));
         handleClose()  
     }
 
@@ -68,15 +69,13 @@ const SavingGoal = (props) => {
         <div>
             <Card onClick={handleShow} style={{ width: '50vw', cursor:'pointer', marginBottom:'3vh' }}>
                 <Card.Body>
-                    <Card.Text>
-                        <div style={{ padding:'1vh' }}>
-                            <div style={{ marginBottom:'2vh' }}>
-                                <span style={{ fontSize:'1.3em' }}>{goal.Name}</span>
-                                <span style={{ fontSize:'1.1em', float:'right' }}>{goal.CurrentAmount} of {goal.Amount}</span>
-                            </div>
-                            <ProgressBar now={percentage} label={`${percentage}%`}>{percentage}%</ProgressBar>
+                    <div style={{ padding:'1vh' }}>
+                        <div style={{ marginBottom:'2vh' }}>
+                            <span style={{ fontSize:'1.3em' }}>{goal.Name}</span>
+                            <span style={{ fontSize:'1.1em', float:'right' }}>{goal.CurrentAmount} of {goal.Amount}</span>
                         </div>
-                    </Card.Text>
+                        <ProgressBar variant="secondary" now={percentage} label={`${percentage}%`}></ProgressBar>
+                    </div>
                 </Card.Body>
             </Card>
             <Modal show={show} onHide={handleClose} centered>

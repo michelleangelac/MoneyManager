@@ -58,8 +58,8 @@ const Home = () => {
         }
         e.preventDefault()
         let user = auth.currentUser;
-        let userEmail = user?.email;
-        let docRef = doc(db, "Users", userEmail);
+        let userEmail = user?.email ? user.email : "";
+        const docRef = doc(db, "Users", userEmail);
         let docSnap = await getDoc(docRef);
         let data = docSnap.data();
         setCategory(category);

@@ -4,7 +4,7 @@ import CSS from 'csstype';
 import { onAuthStateChanged, updateEmail } from "firebase/auth";
 import { doc, getDoc, updateDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { db, auth, storage } from '../auth/firebase';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import Resizer from "react-image-file-resizer";
 
@@ -55,6 +55,9 @@ const Profile = () => {
 
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
+    const [newUsername, setNewUsername] = useState("");
+    const [newEmail, setNewEmail] = useState("");
+
     const [profilePic, setProfilePic] = useState("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
     const [transactions, setTransactions] = useState([])
     const [savingGoals, setSavingGoals] = useState([])
@@ -70,16 +73,11 @@ const Profile = () => {
     }
     const handleShow2 = () => setShow2(true);
 
-    const usernameInputRef = useRef(null);
-    const emailInputRef = useRef(null);
-
     const handleSave = async(event) => {
         event.preventDefault()
         let user = auth.currentUser;
-        let userEmail = user?.email;
-        var docRef = doc(db, 'Users', userEmail);
-        let newEmail = emailInputRef.current.value;
-        let newUsername = usernameInputRef.current.value;
+        let userEmail = user?.email ? user.email : "";
+        let docRef = doc(db, "Users", userEmail);
         
         if(newEmail == email) {
             alert("Error: inputted email is the same as the current one.")
@@ -90,9 +88,8 @@ const Profile = () => {
             return;
         }
         if(newEmail != "") {
-            setEmail(newEmail);
             let err = false;
-            await updateEmail(auth.currentUser, newEmail)
+            await updateEmail(auth.currentUser!, newEmail)
             .then(() => {
                 console.log("Email has been updated")
             })
@@ -112,15 +109,14 @@ const Profile = () => {
                 });
                 await deleteDoc(docRef);
                 setEmail(newEmail);
-            } else {
-                alert(err);
             }
         }
         if(newUsername != "") {
             try {
-                docRef = doc(db, 'Users', (newEmail ? newEmail : userEmail))
+                console.log(newEmail, userEmail)
+                docRef = doc(db, 'Users', (newEmail != "" ? newEmail : userEmail))
                 setUsername(newUsername)
-                updateDoc(docRef, { Username: newUsername })
+                await updateDoc(docRef, { Username: newUsername })
                 alert("Username has been updated.")
             } catch(error) {
                 alert("An error has occurred, please try again!")
@@ -160,9 +156,9 @@ const Profile = () => {
             alert("Please upload an image first.");
             return;
         }
-        const imageResized = await resizeImage(image);
+        const imageResized = await resizeImage(image) as RequestInfo;
         const user = auth.currentUser;
-        const storageRef = ref(storage, user?.email);
+        const storageRef = ref(storage, user?.email!);
         console.log(storageRef)
         fetch(imageResized)
         .then((res) => res.blob())
@@ -174,16 +170,16 @@ const Profile = () => {
                     const percent = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
                     setPercent(percent);
                 },
-                (err) => { 
-                    console.log(err)
-                    alert(err) 
+                (error) => { 
+                    console.log(error)
+                    alert(error) 
                 },
                 () => {
                     getDownloadURL(uploadImage.snapshot.ref)
                     .then((url) => {
                         console.log(url)
                         try {
-                            updateDoc(doc(db, "Users", user?.email), { ProfilePic: url });
+                            updateDoc(doc(db, "Users", user?.email!), { ProfilePic: url });
                             setProfilePic(url);
                             alert("The profile picture has been updated.")
                         } catch(error) {
@@ -242,13 +238,15 @@ const Profile = () => {
                         <input 
                             placeholder={username} 
                             style={{ borderRadius:'9px', width:'50vh', height:'5.5vh' }}
-                            ref={usernameInputRef}>
+                            onChange={(e) => setNewUsername(e.target.value)}
+                        >
                         </input><br></br>
                         <label style={{ margin: '3vh 0 1vh 0', fontSize:'1.1em' }}>Email </label><br></br>
                         <input 
                             placeholder={email} 
                             style={{ borderRadius:'9px', width:'50vh', height:'5.5vh' }}
-                            ref={emailInputRef}>
+                            onChange={(e) => setNewEmail(e.target.value)}
+                        >
                         </input>
                         <button 
                             style={{ margin:'4.5vh 0 2vh 10vh', backgroundColor:'#EFEBEB', border:'1px solid #DFD2D2', width:'50vh', borderRadius:'5px', padding:'7px 10px' }} 
