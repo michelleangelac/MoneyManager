@@ -4,27 +4,28 @@ import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import { auth } from '../auth/firebase'
+import { Container, Row, Col } from 'react-bootstrap';
 
-const container: CSS.Properties = {
-    width: '100vw',
+const bg: CSS.Properties = {
     height: '100vh',
-    backgroundImage: 'url(https://imageupload.io/ib/niPDTzzvN2850Jn_1691137210.jpg)'
+    backgroundImage: "url('/src/assets/bg2.jpg')"
 }
 
 const imgStyles: CSS.Properties = {
     display: 'block',
     marginLeft: 'auto',
     marginRight: 'auto',
-    paddingTop: '5vh',
+    marginTop: '15%',
     marginBottom: '5vh',
-    height: '21vh'
+    height: '15vh'
 }
 
 const h1Styles: CSS.Properties = {
     textAlign: 'center',
     marginBottom: '5vh',
     fontWeight: 'bold',
-    fontFamily: 'Inter'
+    fontFamily: 'Inter',
+    fontSize: '2.3em'
 }
 
 const formStyles: CSS.Properties = {
@@ -34,7 +35,7 @@ const formStyles: CSS.Properties = {
 const inputStyles: CSS.Properties = {
     marginBottom: '2vh',
     borderRadius: '12px',
-    width: '22%',
+    width: '50vh',
     height: '7vh',
     padding: '1vh',
     border: '1px solid #282727',
@@ -72,22 +73,27 @@ const ResetPassword = () => {
     }
 
     return (
-        <div style={container}>
-            <img src={logo} style={imgStyles}></img>
-            <h1 style={h1Styles}>RESET PASSWORD</h1>
-            <div style={{ textAlign:'center', fontSize:'1.2em' }}>Please enter your email address to</div>
-            <div style={{ textAlign:'center', fontSize:'1.2em', marginBottom:'3vh' }}>receive a password recovery email</div>
-            <form style={formStyles}>
-                <input 
-                    style={inputStyles} 
-                    type='email' required 
-                    placeholder='Email Address*' 
-                    onChange={(e) => setEmail(e.target.value)}>
-                </input><br></br>
-                <button style={btnStyles} type='button' onClick={sendPasswordReset}>Send Email</button><br></br>
-                <div style={divStyles}>Don't have an account? <NavLink style={divStyles} to="/signup"><i>Create Account</i></NavLink></div>
-            </form>
-        </div>
+        <Container fluid>
+            <Row>
+                <Col style={bg} lg={8}></Col>
+                <Col>
+                    <img src={logo} style={imgStyles}></img>
+                    <h1 style={h1Styles}>RESET PASSWORD</h1>
+                    <div style={{ textAlign:'center', fontSize:'1.2em' }}>Please enter your email address to</div>
+                    <div style={{ textAlign:'center', fontSize:'1.2em', marginBottom:'3vh' }}>receive a password recovery email</div>
+                    <form style={formStyles}>
+                        <input 
+                            style={inputStyles} 
+                            type='email' required 
+                            placeholder='Email Address*' 
+                            onChange={(e) => setEmail(e.target.value)}>
+                        </input><br></br>
+                        <button style={btnStyles} type='button' onClick={sendPasswordReset}>Send Email</button><br></br>
+                        <div style={divStyles}>Don't have an account? <NavLink style={divStyles} to="/signup"><i>Create Account</i></NavLink></div>
+                    </form>
+                </Col>
+            </Row>
+        </Container>
     );
 }
 
