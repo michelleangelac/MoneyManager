@@ -148,7 +148,7 @@ const Insights = () => {
                     <Col>
                         <span>Income</span><br></br>
                         <span style={{ color:'#42B4E5' }}>{income}</span><br></br>
-                        <PieChart width={625} height={375}>
+                        <PieChart width={600} height={375}>
                             <Pie data={incomePieData} dataKey="value" nameKey="name" outerRadius={120} label={renderCustomizedLabel}>
                                 {incomePieData.map((entry, index) => <Cell key={'cell-${index}'} fill={COLORS[index % COLORS.length]}/>)}
                             </Pie>
@@ -169,7 +169,7 @@ const Insights = () => {
                     <Col>
                         <span>Expense</span><br></br>
                         <span style={{ color:'#E55C5C' }}>{expense}</span>
-                        <PieChart width={625} height={375}>
+                        <PieChart width={600} height={375}>
                             <Pie data={expensePieData} dataKey="value" nameKey="name" outerRadius={120} label={renderCustomizedLabel}>
                                 {expensePieData.map((entry, index) => <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]}/>)}
                             </Pie>

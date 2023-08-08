@@ -9,7 +9,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 
 const bg: CSS.Properties = {
     height: '100vh',
-    backgroundImage: "url('/src/assets/bg2.jpg')"
+    backgroundImage: "url('/bg2.jpg')"
 }
 
 const imgStyles: CSS.Properties = {
